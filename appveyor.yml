@@ -1,0 +1,22 @@
+version: 1.0.{build}
+image:
+- Visual Studio 2013
+- Visual Studio 2015
+before_build:
+- cmd: >-
+    appveyor DownloadFile https://download.affectiva.com/windows/AffdexSDK-3.1-368-win64.exe -FileName AffdexSDK-3.1-368-win64.exe
+
+    AffdexSDK-3.1-368-win64.exe /S
+
+    nuget restore affdex-win-samples.sln
+build:
+  parallel: true
+  verbosity: detailed
+artifacts:
+- path: '\x64\Release'
+deploy:
+- provider: GitHub
+  release: 3.1
+  auth_token:
+    secure: sjCE8t4b8ME8j2D6e0kRpNib8STOljgGVPdexj4n0gXU/nYxFkdaI9GXRukRHri5
+  artifact: Release.zip
